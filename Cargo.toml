@@ -1,12 +1,16 @@
+cargo-features = []
+
 [package]
-name = "millis"
-version = "0.1.0"
-edition = "2018"
+name = "unmillis"
+version = "1.0.1"
+edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = "1.0.53"
+clap_mangen = "0.1.2"
 thiserror = "1.0.30"
-clap = { version = "3.0.14", features = ["derive"] }
+num-integer = "0.1.44"
+anyhow = "1.0.53"
+clap = { version = "3.1.1", features = ["derive"] }
 chrono = "0.4.19"
