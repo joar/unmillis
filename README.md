@@ -16,4 +16,8 @@ $ unmillis 1000
 
 ## Installation
 
-Binaries can be downloaded from [Releases](https://github.com/joar/unmillis/releases)
+- Binaries can be downloaded from [Releases](https://github.com/joar/unmillis/releases); or
+- if you have `cargo`, you can run 
+  ```
+  cargo install unmillis`
+  ```

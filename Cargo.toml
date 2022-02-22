@@ -2,7 +2,11 @@ cargo-features = []
 
 [package]
 name = "unmillis"
-version = "1.0.1"
+version = "1.0.2"
+license = "MIT"
+description = "Given 𝑛, solves for 𝑥 in the equation `unix-epoch + 𝑛 milliseconds = 𝑥`"
+readme = "README.md"
+repository = "https://github.com/joar/unmillis"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
