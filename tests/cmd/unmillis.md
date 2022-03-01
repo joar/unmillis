@@ -1,5 +1,11 @@
 # [`trycmd`](https://github.com/assert-rs/trycmd) Integration Tests for [`unmillis`](https://github.com/joar/unmillis)
 
+Code blocks in this file serve as integration tests. 
+
+- [cli.rs](./cli.rs) invokes `trycmd`;
+- `trycmd` executes the commands from each Markdown code block and compares 
+  the output of the execution to the output in the code block.
+
 ## Happy `unmillis` usage
 
 ### `--help` prints help
@@ -80,6 +86,13 @@ $ unmillis '"1640995200000",'
 
 ## Infuriating `unmillis` usage
 
+> The `? n` line indicates the expected exit code, e.g. `? 1` in
+> ```
+> $ unmillis 9223372036854775808
+> ? 1
+> ```
+> will assert that the exit code is `1`.
+
 ### We're limited by `i64`
 
 ```
@@ -156,6 +169,19 @@ Error: Failed to parse timestamp millis from "16409hellothere95200000"
 
 Caused by:
     0: could not parse integer from trimmed string "16409hellothere95200000"
+    1: invalid digit found in string
+
+```
+
+### We're not fooled by hexadecimal words
+
+```
+$ unmillis 1337beefcafe1337
+? 1
+Error: Failed to parse timestamp millis from "1337beefcafe1337"
+
+Caused by:
+    0: could not parse integer from trimmed string "1337beefcafe1337"
     1: invalid digit found in string
 
 ```
