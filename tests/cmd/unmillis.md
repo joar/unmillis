@@ -1,6 +1,9 @@
 # [`trycmd`](https://github.com/assert-rs/trycmd) Integration Tests for [`unmillis`](https://github.com/joar/unmillis)
 
 ## Happy `unmillis` usage
+
+### `--help` prints help
+
 ```
 $ unmillis --help
 unmillis [..]
@@ -28,17 +31,30 @@ OPTIONS:
 
 ```
 
+### `--version` prints version
+
 ```
 $ unmillis --version
 unmillis [..]
 
 ```
 
+
+### Negative numbers are fine
 ```
 $ unmillis -10
 1969-12-31T23:59:59.990+00:00
 
 ```
+
+### Positive numbers are OK too
+```
+$ unmillis 1640995200000
+2022-01-01T00:00:00+00:00
+
+```
+
+### Garbage will be trimmed from the end
 
 ```
 $ unmillis 1640995200000th
@@ -46,7 +62,38 @@ $ unmillis 1640995200000th
 
 ```
 
+```
+$ unmillis 1640995200000,
+2022-01-01T00:00:00+00:00
+
+```
+
+
+### Garbage will be trimmed from the start and end
+
+```
+$ unmillis '"1640995200000",'
+2022-01-01T00:00:00+00:00
+
+```
+
+
 ## Infuriating `unmillis` usage
+
+### We're limited by `i64`
+
+```
+$ unmillis 9223372036854775808
+? 1
+Error: Failed to parse timestamp millis from "9223372036854775808"
+
+Caused by:
+    0: could not parse integer from trimmed string "9223372036854775808"
+    1: number too large to fit in target type
+
+```
+
+### We're limited by [`chrono`](https://crates.io/crates/chrono)
 
 ```
 $ unmillis 1111111111111111111
@@ -57,6 +104,8 @@ Caused by:
     FromTimestamp error: Sorry, we can't handle timestamps outside the range (-8334632851200000, 8210298412799999), because we can't represent datetimes outside the range (-262144-01-01T00:00:00Z, +262143-12-31T23:59:59.999999999Z)
 
 ```
+
+### We can't make up arguments when none are provided
 
 ```
 $ unmillis
@@ -71,6 +120,8 @@ For more information try --help
 
 ```
 
+### We don't bother parsing numbers expressed using words
+
 ```
 $ unmillis nine 
 ? 1
@@ -82,6 +133,8 @@ Caused by:
 
 ```
 
+### not even if provided multiple words
+
 ```
 $ unmillis nine hundred
 ? 2
@@ -91,5 +144,18 @@ USAGE:
     unmillis <TIMESTAMP_MILLIS>
 
 For more information try --help
+
+```
+
+### We don't trim garbage from the middle
+
+```
+$ unmillis '16409hellothere95200000'
+? 1
+Error: Failed to parse timestamp millis from "16409hellothere95200000"
+
+Caused by:
+    0: could not parse integer from trimmed string "16409hellothere95200000"
+    1: invalid digit found in string
 
 ```
