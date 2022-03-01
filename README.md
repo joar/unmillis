@@ -29,6 +29,9 @@ $ unmillis 1000,  # garbage characters will be ignored
 
 ## Usage
 
+See [tests/cmd/unmillis.md](tests/cmd/unmillis.md) for more examples of both 
+happy and unhappy usage patterns.
+
 ```
 USAGE:
     unmillis <TIMESTAMP_MILLIS>
@@ -50,3 +53,4 @@ OPTIONS:
         --version    Print version information
 
 ```
+
