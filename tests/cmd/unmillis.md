@@ -2,7 +2,7 @@
 
 Code blocks in this file serve as integration tests. 
 
-- [cli.rs](./cli.rs) invokes `trycmd`;
+- [../cli.rs](../cli.rs) invokes `trycmd`;
 - `trycmd` executes the commands from each Markdown code block and compares 
   the output of the execution to the output in the code block.
 
