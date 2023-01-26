@@ -2,7 +2,7 @@ cargo-features = []
 
 [package]
 name = "unmillis"
-version = "1.0.4"
+version = "1.0.5"
 license = "MIT"
 description = "Given 𝑛, solves for 𝑥 in the equation `unix-epoch + 𝑛 milliseconds = 𝑥`"
 readme = "README.md"
