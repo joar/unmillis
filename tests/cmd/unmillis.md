@@ -12,21 +12,25 @@ Code blocks in this file serve as integration tests.
 
 ```
 $ unmillis --help
-Given 𝑛, solves for 𝑥 in the equation `unix-epoch + 𝑛 milliseconds = 𝑥`
+Converts millisecond-precision UNIX timestamps to the more human-readable and as-precise RFC3339 form.
 
 Usage: unmillis <TIMESTAMP_MILLIS>
 
 Arguments:
-  <TIMESTAMP_MILLIS>  A timestamp formulated as the number of milliseconds since "1970-01-01T00:00:00+00:00". 
-                       • Trailing and leading garbage is thrown away, i.e.
-                       • `1 hello there`, `1,` and `"1",` would all be interpreted as `1`.
-                       • Negative numbers are fine, positive numbers are ok too, both have some limitations:
-                       • We can't construct datetimes outside the range of (-262144-01-01T00:00:00Z, +262143-12-31T23:59:59.999999999Z), so
-                       • we only accept input values in the range of (-8334632851200000, 8210298412799999)
+  <TIMESTAMP_MILLIS>
+          A timestamp formulated as the number of milliseconds since "1970-01-01T00:00:00+00:00". 
+           • Trailing and leading garbage is thrown away, i.e.
+           • `1 hello there`, `1,` and `"1",` would all be interpreted as `1`.
+           • Negative numbers are fine, positive numbers are ok too, both have some limitations:
+           • We can't construct datetimes outside the range of (-262144-01-01T00:00:00Z, +262143-12-31T23:59:59.999999999Z), so
+           • we only accept input values in the range of (-8334632851200000, 8210298412799999)
 
 Options:
-  -h, --help     Print help
-  -V, --version  Print version
+  -h, --help
+          Print help (see a summary with '-h')
+
+  -V, --version
+          Print version
 
 ```
 

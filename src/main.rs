@@ -1,4 +1,5 @@
 use std::convert::TryInto;
+use std::path::PathBuf;
 
 use anyhow::{Context, Result};
 use chrono::prelude::*;
@@ -7,8 +8,9 @@ use num_integer::div_mod_floor;
 use thiserror::Error;
 
 #[derive(Parser)]
-#[clap(author = "Joar Wandborg", version)]
-/// Given 𝑛, solves for 𝑥 in the equation `unix-epoch + 𝑛 milliseconds = 𝑥`
+#[command(author = "Joar Wandborg", version, long_about)]
+/// Converts millisecond-precision UNIX timestamps to the more human-readable and as-precise
+/// RFC3339 form.
 struct Cli {
     /// A timestamp formulated as the number of milliseconds since "1970-01-01T00:00:00+00:00".
     ///{n}
@@ -17,7 +19,7 @@ struct Cli {
     /// • Negative numbers are fine, positive numbers are ok too, both have some limitations:{n}
     /// • We can't construct datetimes outside the range of (-262144-01-01T00:00:00Z, +262143-12-31T23:59:59.999999999Z), so{n}
     /// • we only accept input values in the range of (-8334632851200000, 8210298412799999).
-    #[clap(allow_hyphen_values = true)]
+    #[arg(allow_hyphen_values = true)]
     timestamp_millis: String,
 }
 
@@ -65,10 +67,10 @@ fn naive_datetime_from_timestamp_millis(millis: i64) -> Result<NaiveDateTime, Cl
         Some(ndt) => Ok(ndt),
         None => {
             Err(CliError::FromTimestamp(format!(
-            "Sorry, we can't handle timestamps outside the range ({:?}, {:?}), because we can't represent datetimes outside the range ({:?}, {:?})",
-            chrono::MIN_DATETIME.timestamp_millis(), chrono::MAX_DATETIME.timestamp_millis(),
-            chrono::MIN_DATETIME, chrono::MAX_DATETIME
-        )))
+                "Sorry, we can't handle timestamps outside the range ({:?}, {:?}), because we can't represent datetimes outside the range ({:?}, {:?})",
+                chrono::MIN_DATETIME.timestamp_millis(), chrono::MAX_DATETIME.timestamp_millis(),
+                chrono::MIN_DATETIME, chrono::MAX_DATETIME
+            )))
         }
     }
 }
@@ -85,7 +87,7 @@ fn rfc3339_from_timestamp_millis(millis: i64) -> Result<String> {
     datetime_utc_from_timestamp_millis(millis).map(|dt| dt.to_rfc3339())
 }
 
-fn gen_manpage(path: &str) -> Result<()> {
+fn gen_manpage(path: &PathBuf) -> Result<()> {
     let command: Command = Cli::command();
     let man = clap_mangen::Man::new(command);
 
@@ -98,7 +100,7 @@ fn gen_manpage(path: &str) -> Result<()> {
 
 fn main() -> Result<()> {
     if let Some(path) = std::env::var_os("UNMILLIS_GEN_MANPAGE_PATH") {
-        return gen_manpage(path.to_str().unwrap());
+        return gen_manpage(&path.into());
     }
 
     let cli: Cli = Cli::parse();
