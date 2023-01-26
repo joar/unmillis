@@ -2,7 +2,7 @@ use std::convert::TryInto;
 
 use anyhow::{Context, Result};
 use chrono::prelude::*;
-use clap::{Command, IntoApp, Parser};
+use clap::{Command, CommandFactory, Parser};
 use num_integer::div_mod_floor;
 use thiserror::Error;
 
@@ -19,14 +19,6 @@ struct Cli {
     /// • we only accept input values in the range of (-8334632851200000, 8210298412799999).
     #[clap(allow_hyphen_values = true)]
     timestamp_millis: String,
-
-    #[clap(long)]
-    /// Print version information
-    version: bool,
-
-    #[clap(long)]
-    /// Print help information
-    help: bool,
 }
 
 #[derive(Error, Debug)]
@@ -95,7 +87,7 @@ fn rfc3339_from_timestamp_millis(millis: i64) -> Result<String> {
 
 fn gen_manpage(path: &str) -> Result<()> {
     let command: Command = Cli::command();
-    let man = clap_mangen::Man::new(command.clone());
+    let man = clap_mangen::Man::new(command);
 
     let mut buffer: Vec<u8> = Default::default();
     man.render(&mut buffer)?;
