@@ -173,7 +173,7 @@ mod tests {
         should_trim_leading: ["\"123", 123],
         should_trim_both: ["\"123\"", 123],
         should_not_understand_binary: ["101010", 101010],
-        should_trim_null_bytes: ["\01\0", 1],
+        should_trim_null_bytes: ["\x001\x00", 1],
         should_not_trim_leading_hyphen: ["-10", -10],
         should_ignore_non_numeric_sql_injections: [" 001; DROP TABLE timestamps WHERE year = 'the-seventies'", 1],
         should_not_be_distracted_by_ancient_greek_numerals: ["𐅀42", 42],
