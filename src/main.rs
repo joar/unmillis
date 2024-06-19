@@ -55,35 +55,28 @@ fn split_timestamp_millis(millis: i64) -> Result<(i64, u32)> {
     let nanos = (rem_millis * 1_000_000).abs().try_into().with_context(|| {
         format!(
             "could not fit nanos (i64 -> u32) {0:?}",
-            (rem_millis * 1_000_000)
+            rem_millis * 1_000_000
         )
     })?;
     Ok((secs, nanos))
 }
 
-fn naive_datetime_from_timestamp_millis(millis: i64) -> Result<NaiveDateTime, CliError> {
-    let (secs, nanos) = split_timestamp_millis(millis)?;
-    match NaiveDateTime::from_timestamp_opt(secs, nanos) {
+fn datetime_utc_from_timestamp_millis(timestamp_millis: i64) -> Result<DateTime<Utc>, CliError> {
+    let (secs, nanos) = split_timestamp_millis(timestamp_millis)?;
+    match DateTime::from_timestamp(secs, nanos) {
         Some(ndt) => Ok(ndt),
         None => {
             Err(CliError::FromTimestamp(format!(
                 "Sorry, we can't handle timestamps outside the range ({:?}, {:?}), because we can't represent datetimes outside the range ({:?}, {:?})",
-                chrono::MIN_DATETIME.timestamp_millis(), chrono::MAX_DATETIME.timestamp_millis(),
-                chrono::MIN_DATETIME, chrono::MAX_DATETIME
+                DateTime::<Utc>::MIN_UTC.timestamp_millis(), DateTime::<Utc>::MAX_UTC.timestamp_millis(),
+                DateTime::<Utc>::MIN_UTC, DateTime::<Utc>::MAX_UTC
             )))
         }
     }
 }
 
-fn datetime_utc_from_timestamp_millis(timestamp_millis: i64) -> Result<DateTime<Utc>> {
-    Ok(DateTime::from_utc(
-        naive_datetime_from_timestamp_millis(timestamp_millis)?,
-        Utc,
-    ))
-}
-
 /// Performs  arithmetic to figure out the RFC 3339 representation of a millisecond timestamp.
-fn rfc3339_from_timestamp_millis(millis: i64) -> Result<String> {
+fn rfc3339_from_timestamp_millis(millis: i64) -> Result<String, CliError> {
     datetime_utc_from_timestamp_millis(millis).map(|dt| dt.to_rfc3339())
 }
 

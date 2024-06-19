@@ -111,7 +111,7 @@ $ unmillis 1111111111111111111
 Error: could not generate RFC 3339 datetime from millis: 1111111111111111111
 
 Caused by:
-    FromTimestamp error: Sorry, we can't handle timestamps outside the range (-8334632851200000, 8210298412799999), because we can't represent datetimes outside the range (-262144-01-01T00:00:00Z, +262143-12-31T23:59:59.999999999Z)
+    FromTimestamp error: Sorry, we can't handle timestamps outside the range (-8334601228800000, 8210266876799999), because we can't represent datetimes outside the range (-262143-01-01T00:00:00Z, +262142-12-31T23:59:59.999999999Z)
 
 ```
 
